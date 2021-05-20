@@ -1,0 +1,115 @@
+{% extends "dashboard.html" %}
+{% block title %} Enrollment {% endblock %}
+{% block style %}
+<link rel="stylesheet" href="/static/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="/static/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+<link rel="stylesheet" href="/static/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+{% endblock %}
+{% block pagetitle %}Enrollment Manager{% endblock %}
+{% block endtitlepage %}Enrollment Manager{% endblock %}
+{% block content %}
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="AratanModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      ...
+    </div>
+  </div>
+</div>
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">List of Applicants:</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example2" class="table table-bordered table-hover">
+                  <thead>
+                  <tr>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Date of Birth</th>
+                    <th>Address</th>
+                    <th>LRN</th>
+                    <th>ESC ID</th>
+                    <th>QVR ID</th>
+                    <th>Actions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for applicants in applicant_list %}
+                  {% for govid in governmentid_list %}
+                  <tr>
+                    <td>{{ applicants.lastname }}</td>
+                    <td>{{ applicants.firstname }}</td>
+                    <td>{{ applicants.dateofbirth }}</td>
+                    <td>{{ applicants.city }}</td>
+                    {% if applicants.id == govid.enrollment_id %}
+                    <td>{{ govid.lrn_id }}</td>
+                    <td>{{ govid.esc_id }}</td>
+                    <td>{{ govid.qvr_id }}</td>
+                    {% endif %}
+                    <td><div class="btn-group"><button type="button" class="btn btn-block btn-default btn-sm" data-toggle="modal" data-target="#AratanModal">View</button><button type="button" class="btn btn-block btn-success btn-sm" value="{{ applicants.id }}" onclick="approved_onclick(this.value)">Approve</button><button type="button" class="btn btn-block btn-danger btn-sm" value="{{ applicants.id }}" onclick="declined_onclick(this.value)">Decline</button></div></td>
+                  </tr>
+                  {% endfor %}
+                  {% endfor %}
+
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Date of Birth</th>
+                    <th>Address</th>
+                    <th>LRN</th>
+                    <th>ESC ID</th>
+                    <th>QVR ID</th>
+                    <th>Actions</th>
+                  </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+{% endblock %}
+{% block script %}
+<!-- Data Tables -->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/static/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/static/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="/static/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/static/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="/static/plugins/jszip/jszip.min.js"></script>
+<script src="/static/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="/static/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="/static/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="/static/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="/static/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<!-- /.Data Tables -->
+<script src="/static/dist/js/adminlte.min.js"></script>
+<script>
+  $(function () {
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
+{% endblock %}

@@ -28,7 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'login',
     'dashboard',
+    'manager_enrollment'
 ]
 
 MIDDLEWARE = [
@@ -81,9 +81,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'classroomdb',
-        'USER': 'user_classroomdb',
-        'PASSWORD': 's22-C350',
-        'HOST': '127.0.0.1',
+        'USER': 'classroom_user',
+        'PASSWORD': 'classroom123',
+        'HOST': '192.168.1.108',
         'PORT': '3306',
     }
 }
