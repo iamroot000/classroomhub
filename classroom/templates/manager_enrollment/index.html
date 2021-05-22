@@ -8,10 +8,9 @@
 {% block pagetitle %}Enrollment Manager{% endblock %}
 {% block endtitlepage %}Enrollment Manager{% endblock %}
 {% block content %}
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="AratanModal">
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" name="DetailsModal" id="DetailsModal">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      ...
+    <div class="modal-content" id="modal-content">
     </div>
   </div>
 </div>
@@ -25,7 +24,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="example2" class="table table-bordered table-hover">
+                <table id="applicantTable" class="table table-bordered table-hover">
                   <thead>
                   <tr>
                     <th>Last Name</th>
@@ -40,20 +39,24 @@
                   </thead>
                   <tbody>
                   {% for applicants in applicant_list %}
-                  {% for govid in governmentid_list %}
                   <tr>
                     <td>{{ applicants.lastname }}</td>
                     <td>{{ applicants.firstname }}</td>
                     <td>{{ applicants.dateofbirth }}</td>
                     <td>{{ applicants.city }}</td>
-                    {% if applicants.id == govid.enrollment_id %}
-                    <td>{{ govid.lrn_id }}</td>
-                    <td>{{ govid.esc_id }}</td>
-                    <td>{{ govid.qvr_id }}</td>
-                    {% endif %}
-                    <td><div class="btn-group"><button type="button" class="btn btn-block btn-default btn-sm" data-toggle="modal" data-target="#AratanModal">View</button><button type="button" class="btn btn-block btn-success btn-sm" value="{{ applicants.id }}" onclick="approved_onclick(this.value)">Approve</button><button type="button" class="btn btn-block btn-danger btn-sm" value="{{ applicants.id }}" onclick="declined_onclick(this.value)">Decline</button></div></td>
+                    <td>{{ applicants.lrn_id }}</td>
+                    <td>{{ applicants.esc_id }}</td>
+                    <td>{{ applicants.qvr_id }}</td>
+<!--                     <td><div class="btn-group"><button type="button" class="btn btn-block btn-default btn-sm" data-toggle="modal" data-target="#AratanModal">View</button>
+
+                      <button type="submit" class="btn btn-block btn-success btn-sm" value="{{ applicants.id }}" onclick="approved_onclick(this.value)">Approve</button><button type="button" class="btn btn-block btn-danger btn-sm" value="{{ applicants.id }}" onclick="">Decline</button></div></td> -->
+                    <td><div class="btn-group"><button type="button" class="btn btn-block btn-default btn-sm" data-toggle="modal" data-target="#DetailsModal" onclick="toModal(this.value)" value="{{ applicants.id }}">View</button>
+
+                      <form id="approved_status">
+                        {% csrf_token %}
+                        <button id="approved_id" class="btn btn-block btn-success btn-sm" value="{{ applicants.id }}" type="submit">Approve</button></form>
+                      <form id="declined_status"><button id="declined_id" class="btn btn-block btn-danger btn-sm" value="{{ applicants.id }}" type="submit">Decline</button></form></div></td>
                   </tr>
-                  {% endfor %}
                   {% endfor %}
 
                   </tbody>
@@ -101,7 +104,7 @@
 <script src="/static/dist/js/adminlte.min.js"></script>
 <script>
   $(function () {
-    $('#example2').DataTable({
+    $('#applicantTable').DataTable({
       "paging": true,
       "lengthChange": false,
       "searching": false,
@@ -112,4 +115,37 @@
     });
   });
 </script>
+<script>
+  $(document).on('submit','#approved_status', function(e) {
+      e.preventDefault();
+      $.ajax({
+        type:'POST',
+        url:"{% url 'approved_status' %}",
+        data:{
+          get_id:$('#approved_id').val(),
+        },
+        success:function(){
+          alert('Applicant Approved')
+          location.reload();
+        }
+      });
+  });
+</script>
+<script>
+  $(document).on('submit','#declined_status', function(e) {
+      e.preventDefault();
+      $.ajax({
+        type:'POST',
+        url:"{% url 'declined_status' %}",
+        data:{
+          get_id:$('#declined_id').val(),
+        },
+        success:function(){
+          alert('Applicant Declined')
+          location.reload();
+        }
+      });
+  });
+</script>
+<script src="/static/js/manager_enrollment/main.js"></script>
 {% endblock %}
