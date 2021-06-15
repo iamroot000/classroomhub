@@ -1,12 +1,6 @@
 from django.db import models
 from django.utils.timezone import now
 
-# Create your models here.
-class alumni(models.Model):	
-	enrollment_id = models.IntegerField(null=True)
-	aluminfo = models.TextField(max_length=250, null=False)
-	alumsurvey = models.TextField(max_length=250, null=False)
-
 class application(models.Model):
 	firstname = models.TextField(max_length=20, null=False)
 	middlename = models.TextField(max_length=20, null=False)
@@ -30,37 +24,9 @@ class application(models.Model):
 	lrn_id = models.IntegerField(null=True)
 	esc_id = models.IntegerField(null=True)
 	qvr_id = models.IntegerField(null=True)
-	status = models.TextField(max_length=15, null=False, default='pending')
+	status_finance = models.TextField(max_length=15, null=False, default='pending')
+	status_guidance = models.TextField(max_length=15, null=False, default='pending')
+	status_registrar = models.TextField(max_length=15, null=False, default='pending')
 
 	def __str__(self):
 		return self.lastname
-class test(models.Model):
-	testfield = models.TextField(max_length=10)
-
-class educbackground(models.Model):
-	enrollment_id = models.IntegerField(null=True)
-	preschool = models.TextField(max_length=250, null=True)
-	gradeschool = models.TextField(max_length=250, null=True)
-	highschool = models.TextField(max_length=250, null=True)
-
-
-class fambackground(models.Model):
-	enrollment_id = models.IntegerField(null=True)
-	motherinfo = models.TextField(max_length=250, null=True)
-	fatherinfo = models.TextField(max_length=250, null=True)
-	siblingsinfo = models.TextField(max_length=250, null=True)
-	otherfaminfo = models.TextField(max_length=250, null=True)
-
-
-class health(models.Model):
-	enrollment_id = models.IntegerField(null=True)
-	healthsurvey = models.TextField(max_length=250, null=True)
-
-
-class schoolsurvey(models.Model):
-	enrollment_id = models.IntegerField(null=True)
-	surveyinfo = models.TextField(max_length=250, null=True)
-
-
-
-

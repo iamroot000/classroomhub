@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'login',
     'dashboard',
-    'manager_enrollment'
+    'manager_enrollment',
+    'grading_management'
 ]
 
 MIDDLEWARE = [
@@ -139,3 +140,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = '/dashboard'
+
+REDIS_HOST = '192.168.1.108'
+REDIS_PORT = 6379
+REDIS_DBINDEX = 0
+REDIS_PASSWORD = None
+REDIS_CONFIG_DBINDEX = 3
+
+BROKER_URL = 'redis://{0}:{1}'.format(REDIS_HOST,REDIS_PORT)
+CELERY_RESULT_BACKEND = BROKER_URL
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_CREATE_MISSING_QUEUES = True

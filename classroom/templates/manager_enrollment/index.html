@@ -20,7 +20,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">List of Applicants:</h3>
+                <h3 class="card-title">List of Applicants: <button id='celery_test' class='btn btn-block btn-info btn-sm'  value='' onclick='celery_test()'>Celery</button></h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -29,46 +29,27 @@
                   <tr>
                     <th>Last Name</th>
                     <th>First Name</th>
-                    <th>Date of Birth</th>
-                    <th>Address</th>
                     <th>LRN</th>
                     <th>ESC ID</th>
                     <th>QVR ID</th>
+                    <th>Registrar Status</th>
+                    <th>Guidance Status</th>
+                    <th>Finance approved_status</th>
                     <th>Actions</th>
                   </tr>
                   </thead>
-                  <tbody>
-                  {% for applicants in applicant_list %}
-                  <tr>
-                    <td>{{ applicants.lastname }}</td>
-                    <td>{{ applicants.firstname }}</td>
-                    <td>{{ applicants.dateofbirth }}</td>
-                    <td>{{ applicants.city }}</td>
-                    <td>{{ applicants.lrn_id }}</td>
-                    <td>{{ applicants.esc_id }}</td>
-                    <td>{{ applicants.qvr_id }}</td>
-<!--                     <td><div class="btn-group"><button type="button" class="btn btn-block btn-default btn-sm" data-toggle="modal" data-target="#AratanModal">View</button>
-
-                      <button type="submit" class="btn btn-block btn-success btn-sm" value="{{ applicants.id }}" onclick="approved_onclick(this.value)">Approve</button><button type="button" class="btn btn-block btn-danger btn-sm" value="{{ applicants.id }}" onclick="">Decline</button></div></td> -->
-                    <td><div class="btn-group"><button type="button" class="btn btn-block btn-default btn-sm" data-toggle="modal" data-target="#DetailsModal" onclick="toModal(this.value)" value="{{ applicants.id }}">View</button>
-
-                      <form id="approved_status">
-                        {% csrf_token %}
-                        <button id="approved_id" class="btn btn-block btn-success btn-sm" value="{{ applicants.id }}" type="submit">Approve</button></form>
-                      <form id="declined_status"><button id="declined_id" class="btn btn-block btn-danger btn-sm" value="{{ applicants.id }}" type="submit">Decline</button></form></div></td>
-                  </tr>
-                  {% endfor %}
-
+                  <tbody id="table-content">
                   </tbody>
                   <tfoot>
                   <tr>
                     <th>Last Name</th>
                     <th>First Name</th>
-                    <th>Date of Birth</th>
-                    <th>Address</th>
                     <th>LRN</th>
                     <th>ESC ID</th>
                     <th>QVR ID</th>
+                    <th>Registrar Status</th>
+                    <th>Guidance Status</th>
+                    <th>Finance approved_status</th>
                     <th>Actions</th>
                   </tr>
                   </tfoot>
@@ -113,38 +94,6 @@
       "autoWidth": false,
       "responsive": true,
     });
-  });
-</script>
-<script>
-  $(document).on('submit','#approved_status', function(e) {
-      e.preventDefault();
-      $.ajax({
-        type:'POST',
-        url:"{% url 'approved_status' %}",
-        data:{
-          get_id:$('#approved_id').val(),
-        },
-        success:function(){
-          alert('Applicant Approved')
-          location.reload();
-        }
-      });
-  });
-</script>
-<script>
-  $(document).on('submit','#declined_status', function(e) {
-      e.preventDefault();
-      $.ajax({
-        type:'POST',
-        url:"{% url 'declined_status' %}",
-        data:{
-          get_id:$('#declined_id').val(),
-        },
-        success:function(){
-          alert('Applicant Declined')
-          location.reload();
-        }
-      });
   });
 </script>
 <script src="/static/js/manager_enrollment/main.js"></script>

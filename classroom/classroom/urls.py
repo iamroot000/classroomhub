@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^$', include('login.urls')),
     url(r'^dashboard/', include('dashboard.urls')),
     url(r'^enrollment/', include('manager_enrollment.urls')),
+    url(r'^grading/', include('grading_management.urls')),
 ]

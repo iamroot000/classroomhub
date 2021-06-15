@@ -1,28 +1,74 @@
-console.log('testing lang');
+const tableBody = document.getElementById('table-content')
 
-// $.ajax({
-//   type:'GET',
-//   url: 'manager_enrollment',
-//   success: function(response){
-//     data = JSON.parse(response.data)
-//     data.forEach(el =>{
-//       console.log(el.fields)
-//     });
-//   }
+$.ajax({
+  type:'GET',
+  url: 'table-view',
+  success: function(response){
+    data = JSON.parse(response.data)
+    data.forEach(el=>{
+      console.log(el.fields)
+      tableBody.innerHTML += "<tr>"+
+      "<td>"+el.fields.lastname+"</td>"+
+      "<td>"+el.fields.firstname+"</td>"+
+      "<td>"+el.fields.lrn_id+"</td>"+
+      "<td>"+el.fields.esc_id+"</td>"+
+      "<td>"+el.fields.qvr_id+"</td>"+
+      "<td>"+el.fields.status_registrar+"</td>"+
+      "<td>"+el.fields.status_guidance+"</td>"+
+      "<td>"+el.fields.status_finance+"</td>"+
+      "<td><div class='btn-group'><button type='button' class='btn btn-block btn-default btn-sm' data-toggle='modal' data-target='#DetailsModal' onclick='toModal(this.value)' value='"+el.pk+"'>View</button>"+
+      "<button id='approved_id' class='btn btn-block btn-success btn-sm'  value='"+el.pk+"' onclick='toApprove(this.value)'>Approve</button>"+
+      "<button id='declined_id' class='btn btn-block btn-error btn-sm'  value='"+el.pk+"' onclick='toDecline(this.value)'>Decline</button></div></td>"+
+      "</tr>"
 
-// });
+    });
+  }
+
+});
+
+function celery_test(){
+  $.ajax({
+    type:'POST',
+    url: 'celery',
+    success: function(response){
+      alert(response)
+    }
+  });
+}
+
+function toApprove(id){
+  $.ajax({
+    type:'POST',
+    url: 'approved',
+    data: {'id':id},
+    success: function(response){
+      alert(response)
+      location.reload();
+    }
+  });
+}
+
+function toDecline(id){
+  $.ajax({
+    type:'POST',
+    url: 'declined',
+    data: {'id':id},
+    success: function(response){
+      alert(response)
+      location.reload();
+    }
+  });
+}
 
 function toModal(id){
   const modalBody = document.getElementById("modal-content")
   var nDict = {};
   $.ajax({
     type:'GET',
-    url: 'json-test/',
+    url: 'modal-view',
     success:function(response){
       data = JSON.parse(response.data)
-      console.log(data)
       $.each(data, function(key, value){
-        console.log(value['pk'], value['fields']);
         nDict[value['pk']]= value['fields']
       });
       console.log(nDict[id]);
@@ -33,8 +79,7 @@ function toModal(id){
       document.getElementById('md_lrn').value = nDict[id]['lrn_id'];
       document.getElementById('md_qvr').value = nDict[id]['qvr_id'];
       document.getElementById('md_esc').value = nDict[id]['esc_id'];
-      // $('#md_esc').val(nDict[id]['esc_id']);
-      // $('#a').attr("id","");
+
     },
     error: function(error){
     }
