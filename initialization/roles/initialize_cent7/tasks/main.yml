@@ -1,0 +1,8 @@
+---
+- include: install_first.yml
+- include: install_centos_rpm.yml
+- include: install_packages.yml
+- include: hostname.yml
+- include: install_user.yml
+- include: ownership.yml
+- include: iptables_config.yml

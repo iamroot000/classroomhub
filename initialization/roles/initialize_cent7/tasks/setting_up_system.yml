@@ -1,0 +1,27 @@
+---
+  - name: Moving .bashrc to ommgr                                                       #Moving .bashrc to ommgr
+    command: mv /root/.bashrc /home/ommgr/bashrc-root.txt
+    failed_when: false
+    
+  - name: Creating ssh directory
+    file:
+      path: {{ item.path }}
+      state: directory
+      owner: {{ item.owner }}
+      group: {{ item.group }}
+      mode: {{ item.mod }}
+    with_items:
+      - { path: '/root/.ssh', owner: 'root' ,group: 'root', mod: '600'}
+      - { path: '/home/ommgr/.ssh', owner: '{{ user }}',group: '{{ user }}', mod: '600'}
+
+
+  - name: Configuring authorized-keys
+    templates:
+      src: '{{ item.src }}'
+      dest: '{{ item.dest }}'
+      owner: '{{ item.own_grp }}'
+      group: '{{ item.own_grp }}'
+      mode: '{{ item.mod }}'
+    with_items:
+      - { src: 'authorized_keys.j2', dest: '/home/ommgr/.ssh/authorized_keys', own_grp: 'root', mod: '0644' }
+      - { src: 'authorized_keys_root.j2', dest: '/root/.ssh/authorized_keys', own_grp: 'root', mod: '0644' }

@@ -1,0 +1,30 @@
+- name: 'Disable firewalld Services'
+  service:
+    name: "{{item}}"
+    state: stopped
+    enabled: no
+  loop:
+   - firewalld
+  when: ansible_facts.services[item] is defined
+  ignore_errors: yes
+
+- name: Enable iptables
+  become: yes
+  service: name=iptables enabled=yes state=restarted
+
+- name: Creating bak/bin/ directory                                                        #Creating directory
+  file:
+    path: '/bak/bin/'
+    state: directory
+
+- name: Configuring Iptables
+  templates:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    mode: '{{ item.mod }}'
+  with_items:
+    - { src: 'iptables.sh.j2', dest: '/bak/bin/iptables.sh', mod: '0755' }
+    - { src: 'rc.local.j2', dest: '/etc/rc.d/rc.local', mod: '0755'}
+
+- name: starting Iptables
+  shell: "sh /bak/bin/iptables.sh"

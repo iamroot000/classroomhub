@@ -1,0 +1,38 @@
+---
+- name: Clear Memory Cache
+  shell: "echo 3 > /proc/sys/vm/drop_caches"
+
+- name: Install libselinux-python
+  yum:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - libselinux-python
+    - openssh-clients
+
+- name: Configuring resolver
+  templates:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    owner: '{{ item.own_grp }}'
+    group: '{{ item.own_grp }}'
+    mode: '{{ item.mod }}'
+  with_items:
+    - { src: 'resolv.conf.j2', dest: '/etc/resolv.conf', own_grp: 'root', mod: '0644' }
+
+- name: Disabling SELINUX
+  selinux:
+    state: disabled
+  failed_when: false
+
+
+- name: Disabling SELINUX (Enforcing)
+  command: setenforce Enforcing
+  failed_when: false
+
+
+- name: Removing SELINUX Policy
+  yum:
+    name: 'selinux-policy'
+    state: absent
+  failed_when: false

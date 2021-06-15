@@ -1,0 +1,8 @@
+---
+- hosts: centos7_init
+  gather_facts: yes
+
+  roles:
+    - initialize_cent7
+  tags: "cent7_initialize"
+  become: True

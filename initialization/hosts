@@ -1,0 +1,11 @@
+[centos7_init]
+121.127.246.229 ansible_ssh_port=28032 ansible_ssh_user=ommgr
+[multi:children]
+centos7_init
+
+[multi:vars]
+AUTH_BASIC_ENABLED=False
+HOST_KEY_CHECKING=False
+ANSIBLE_HOST_KEY_CHECKING=False
+hostname=''
+user=''

@@ -1,0 +1,58 @@
+#!/bin/sh
+/sbin/iptables -F
+/sbin/iptables -t nat -F
+/sbin/iptables -A INPUT -i lo -j ACCEPT
+/sbin/iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+#MONACO1
+/sbin/iptables -A INPUT -s 103.29.22.112/29 -j ACCEPT #fccdci(techzone)  
+/sbin/iptables -A INPUT -s 203.177.15.222/30 -j ACCEPT #globe(techzone)
+/sbin/iptables -A INPUT -s 175.45.41.112/28 -j ACCEPT #WTT(techzone)
+/sbin/iptables -A INPUT -s 175.100.204.34 -j ACCEPT #OM HGC-IP
+/sbin/iptables -A INPUT -s 203.90.246.96/29 -j ACCEPT #HGC-IP(techzone-UP)
+/sbin/iptables -A INPUT -s 203.90.248.96/29 -j ACCEPT #HGC-IP(techzone-UP)
+/sbin/iptables -A INPUT -s 203.90.255.248/29 -j ACCEPT #HGC-IP(techzone-UP)
+/sbin/iptables -A INPUT -s 222.127.1.64/29 -j ACCEPT #DIA-IP(techzone-UP)
+/sbin/iptables -A INPUT -s 175.100.203.160/29 -j ACCEPT #DIA-IP(HGC)
+/sbin/iptables -A INPUT -s 223.119.193.128/29 -j ACCEPT #DIA-IP(CMI)
+/sbin/iptables -A INPUT -s 202.155.246.240 -j ACCEPT #wtt
+/sbin/iptables -A INPUT -s 202.155.246.241 -j ACCEPT #wtt
+/sbin/iptables -A INPUT -s 58.64.207.208 -p tcp -m tcp --dport 28032 -j ACCEPT
+/sbin/iptables -A INPUT -s 59.148.22.108 -p tcp -m tcp --dport 28032 -j ACCEPT
+/sbin/iptables -A INPUT -s 59.148.22.109 -p tcp -m tcp --dport 28032 -j ACCEPT
+
+
+/sbin/iptables -A INPUT -s 119.9.94.6 -p tcp -m tcp --dport 10050  -j ACCEPT # zabbix agent
+
+
+##ANSIBLE
+/sbin/iptables -A INPUT -s 119.9.93.146 -p tcp -m tcp --dport 2556 -j ACCEPT
+/sbin/iptables -A INPUT -s 119.9.94.6 -p tcp -m tcp --dport 999 -j ACCEPT
+/sbin/iptables -A INPUT -p tcp -m tcp --dport 2556 -j DROP
+/sbin/iptables -A INPUT -m tcp -p tcp --dport 80 -j ACCEPT
+/sbin/iptables -A INPUT -m tcp -p tcp --dport 443 -j ACCEPT
+/sbin/iptables -A INPUT -m tcp -p tcp --dport 909 -j ACCEPT
+
+
+bash /bak/bin/additional-iptables.sh
+
+##CATCH
+
+/sbin/iptables -A INPUT -s 103.231.56.86 -j ACCEPT        #VPN86-HK
+/sbin/iptables -A INPUT -s 119.81.56.201 -j ACCEPT #SG-VPN
+/sbin/iptables -A INPUT -s 59.188.254.210 -j ACCEPT #Elmo IP
+/sbin/iptables -A INPUT -s 211.24.96.55 -j ACCEPT #Malaysia-officeIP
+
+######B2B IP ####
+/sbin/iptables -A INPUT -s 112.198.18.198 -j ACCEPT
+/sbin/iptables -A INPUT -s 43.231.229.123 -j ACCEPT
+
+
+/sbin/iptables -A INPUT -f -m limit --limit 100/sec --limit-burst 100 -j DROP
+/sbin/iptables -A INPUT -p icmp --icmp-type echo-request -m limit --limit 1/s --limit-burst 10 -j DROP
+/sbin/iptables -A INPUT -p tcp -m tcp --tcp-flags SYN,RST,ACK SYN -m limit --limit 20/sec --limit-burst 200 -j DROP
+
+/sbin/iptables -A INPUT -m state --state INVALID,NEW -j DROP
+
+/sbin/iptables-save
+/sbin/iptables-save

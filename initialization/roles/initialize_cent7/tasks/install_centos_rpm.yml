@@ -1,0 +1,23 @@
+---
+- name: Removing old repo
+  shell: 'rm -f /etc/yum.repos.d/*'
+  ignore_errors: yes
+
+
+- name: Installing centos7
+  template:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    owner: '{{ item.own_grp }}'
+    group: '{{ item.own_grp }}'
+    mode: '{{ item.mod }}'
+  with_items:
+    - { src: 'epel.repo.j2', dest: '/etc/yum.repos.d/epel.repo', own_grp: 'root', mod: '0644' }
+    - { src: 'CentOS-Base.repo.j2', dest: '/etc/yum.repos.d/CentOS-Base.repo', own_grp: 'root', mod: '0644' }
+
+- name: Configuring /etc/yum.repos.d/epel.repo
+  replace:
+    path: "/etc/yum.repos.d/epel.repo"
+    regexp: "mirrorlist=https"
+    replace: "mirrorlist=http"
+  failed_when: false

@@ -1,0 +1,20 @@
+---
+  - name: Checking multi-user                                                             #Checking multi-user
+    shell: 'systemctl get-default'
+
+  - name: Setting multi-user                                                              #Setting multi-user
+    shell: 'systemctl set-default multi-user.target'
+
+  - name: Configuring ulimit
+    templates:
+      src: '{{ item.src }}'
+      dest: '{{ item.dest }}'
+    with_items:
+      - { src: 'limits.conf.j2', dest: '/etc/security/limits.conf'}
+      - { src: 'sysctl.conf.j2', dest: '/etc/sysctl.conf'}
+
+  - name: backup sysctl
+    shell: 'mv /etc/sysctl.conf /tmp/sysctl.conf.bak'
+
+  - name: run sysctl
+    shell: '/sbin/sysctl -p'

@@ -1,0 +1,25 @@
+---
+- name: Creating ommgr user                                                       #Creating ommgr user
+  user:
+    name: '{{ user }}'
+    home: '/home/{{ user }}'
+    createhome: yes
+    state: present
+
+- name: Creating directory                                                        #Creating directory
+  file:
+    path: '/home/{{ user }}/.ssh'
+    owner: '{{ user }}'
+    group: '{{ user }}'
+    state: directory
+    mode: 0700
+
+- name: Configuring resolver
+  templates:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    owner: '{{ item.own_grp }}'
+    group: '{{ item.own_grp }}'
+    mode: '{{ item.mod }}'
+  with_items:
+    - { src: 'resolv.conf.j2', dest: '/etc/resolv.conf', own_grp: 'root', mod: '0644' }
