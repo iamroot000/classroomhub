@@ -6,3 +6,4 @@ class applicationAdmin(admin.ModelAdmin):
 	readonly_fields =('id',)
 
 admin.site.register(application,applicationAdmin)
+admin.site.register(enrolled_students)

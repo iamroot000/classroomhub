@@ -8,12 +8,16 @@
 
 
 - name: Updating packages
-  yum:
-    name: '*'
-    update_cache: yes
-#  ignore_errors: yes
+  shell: "yum update -y"
 
+- name: Copying epel-release
+  copy:
+    src: epel-release-latest-7.noarch.rpm
+    dest: /root/
 
+- name: Installing epel-release
+  shell: "rpm -Uvh /root/epel-release-latest-7.noarch.rpm"
+  ignore_errors: yes
 
 - name: Installing packages
   yum:

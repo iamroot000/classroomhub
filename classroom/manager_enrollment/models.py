@@ -30,3 +30,12 @@ class application(models.Model):
 
 	def __str__(self):
 		return self.lastname
+
+class enrolled_students(models.Model):
+	firstname = models.TextField(max_length=20, null=False)
+	middlename = models.TextField(max_length=20, null=False)
+	lastname = models.TextField(max_length=20, null=False)
+	gradelevel = models.TextField(max_length=15, null=False)
+	section = models.TextField(max_length=15, null=False)
+	def __str__(self):
+		return self.lastname

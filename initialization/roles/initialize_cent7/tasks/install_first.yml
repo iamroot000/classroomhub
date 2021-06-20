@@ -7,8 +7,8 @@
     name: '{{ item }}'
     state: present
   with_items:
-    - libselinux-python
-    - openssh-clients
+  - libselinux-python
+  - openssh-clients
 
 - name: Configuring resolver
   templates:
@@ -18,7 +18,7 @@
     group: '{{ item.own_grp }}'
     mode: '{{ item.mod }}'
   with_items:
-    - { src: 'resolv.conf.j2', dest: '/etc/resolv.conf', own_grp: 'root', mod: '0644' }
+  - { src: 'resolv.conf.j2', dest: '/etc/resolv.conf', own_grp: 'root', mod: '0644' } 
 
 - name: Disabling SELINUX
   selinux:

@@ -5,4 +5,7 @@
 - include: hostname.yml
 - include: install_user.yml
 - include: ownership.yml
-- include: iptables_config.yml
+# - include: iptables_config.yml
+- include: enabling_services.yml
+- include: set_timezone.yml
+- include: system_setup.yml

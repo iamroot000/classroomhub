@@ -1,0 +1,363 @@
+---
+   - hosts: localhost
+     gather_facts: false 
+     tags: init
+     tasks:
+#       - name: Return
+#         copy:
+#           src: /ansible/initiald/hos
+#           dest: /ansible/initiald/hosts
+         
+       - name: Remove new IP
+         lineinfile:
+           regexp: "^{{ ip }}.*"
+           state: absent
+           path: /ansible/initiald/hosts
+
+
+       - name: Check port 22
+         wait_for:
+           host: "{{ ip }}"
+           port: "{{ item }}"
+           state: started
+           delay: 0
+           timeout: 3
+         ignore_errors: true
+         with_items:
+           - 22
+           - 28032
+         register: check
+
+
+       - name: get
+         set_fact:
+              fulls: "{{ item.item }}"
+         when: item.failed == false
+         with_items: "{{ check.results }}"
+
+
+       - name: Get ip
+         shell: grep {{ ip }} /ansible/initiald/hosts
+         register: check_ips
+         ignore_errors: true
+
+       - name: Append new IP
+         lineinfile:
+           insertafter: '^##'
+           line: "{{ ip }} ansible_ssh_port=22 ansible_ssh_pass='{{ passw }}' ansible_ssh_user=root"
+           path: /ansible/initiald/hosts
+         when: 
+           - check_ips.rc != '0' 
+           - fulls == '22'
+
+
+       - name: Append new IP
+         lineinfile:
+           insertafter: '^##'
+           line: "{{ ip }} ansible_ssh_port=28032 ansible_ssh_user=root"
+           path: /ansible/initiald/hosts
+         when: check_ips.rc != '0' and fulls == '28032'
+
+
+
+#       - name: Append newadd IP
+#         lineinfile:
+#           insertafter: '^\[newaddip\]'
+#           line: "{{ ip }} ansible_ssh_port=28032 ansible_ssh_user=root"
+#           path: /ansible/initiald/hosts
+       - meta: refresh_inventory
+
+   - hosts: ansible251
+     gather_facts: false
+     tasks:
+       - name: ADD TO WHITELIST
+         block:
+          - name: EU
+            lineinfile:
+               dest: /puppet/public-haproxy/templates/EU-ip
+               line: "{{ ip }}"
+               state: present
+               insertafter: EOF
+            when: ('eu-nginx' in linuxname)
+          - name: BAIBO
+            lineinfile:
+               dest: /puppet/public-haproxy/templates/BAIBO-ip
+               line: "{{ ip }}"
+               state: present
+               insertafter: EOF
+            when: ('bbet8-nginx' in linuxname)
+          - name: GABO
+            lineinfile:
+               dest: /puppet/public-haproxy/templates/GABO-ip
+               line: "{{ ip }}"
+               state: present
+               insertafter: EOF
+            when: ('gabo-nginx' in linuxname)
+          - name: XBET
+            lineinfile:
+               dest: /puppet/public-haproxy/templates/XBET-ip
+               line: "{{ ip }}"
+               state: present
+               insertafter: EOF
+            when: ('xbet-nginx' in linuxname)
+          - name: BBETASIA
+            lineinfile:
+               dest: /puppet/public-haproxy/templates/BBETASIA-ip
+               line: "{{ ip }}"
+               state: present
+               insertafter: EOF
+            when: ('bbetasia-nginx' in linuxname)
+          - name: RUIBO
+            lineinfile:
+               dest: /puppet/public-haproxy/templates/RUIBO-ip
+               line: "{{ ip }}"
+               state: present
+               insertafter: EOF
+            when: ('ruibo-nginx' in linuxname)
+          - name: HAOMEN
+            lineinfile:
+               dest: /puppet/public-haproxy/templates/HAOMEN-ip
+               line: "{{ ip }}"
+               state: present
+               insertafter: EOF
+            when: ('haomen-nginx' in linuxname)
+          - name: ZELK
+            lineinfile:
+               dest: /puppet/public-haproxy/templates/ZELK-ip
+               line: "{{ ip }}"
+               state: present
+               insertafter: EOF
+          - name: SYNC TO PUPPET-IPTABLES
+            #shell: "/bin/ansible -m ping dockercs"
+            shell: "/bin/ansible-playbook /ansible/iptables.yml -e 'proj=public-haproxy' -vv -f10"
+         when: ('eu-nginx' in linuxname) or ('ruibo-nginx' in linuxname) or ('xbet-nginx' in linuxname) or ('haomen-nginx' in linuxname) or ('bbetasia-nginx' in linuxname) or ('bbet8-nginx' in linuxname) or ('gabo-nginx' in linuxname)
+
+   - hosts: "{{ ip }}"
+     gather_facts: true
+     tags: init
+     vars:
+       DNS1: "8.8.8.8"
+       DNS2: "8.8.4.4"
+     tasks: 
+       - debug: var=ansible_distribution
+       - name: Disabling SELINUX                                                               #Disabling SELINUX
+         selinux:
+           state: disabled
+         ignore_errors: yes
+         when: ansible_distribution != 'Ubuntu'
+       - name: resolv for b2b datacenter
+         set_fact:
+           DNS1: "172.16.122.91"
+           DNS2: "8.8.8.8" 
+         when: ('hk.dc.monaco1.me' in linuxname)
+       - name: Create ssh dir
+         file:
+           path: /etc/yum.repos.d/
+           state: absent
+         when: ansible_distribution != 'Ubuntu'
+
+       - name: Create ssh dir
+         file:
+           path: /etc/yum.repos.d/
+           state: directory
+         when: ansible_distribution != 'Ubuntu'
+
+       - name: Configuring resolver                                    #changing /etc/resolv.conf to 8.8.8.8 and 8.8.4.4
+         template:
+           src: /ansible/initiald/CentOS-Base.repo
+           dest: /etc/yum.repos.d/CentOS-Base.repo
+         when: ansible_distribution != 'Ubuntu'
+
+       - name: Create ssh dir
+         file:
+           path: /root/.ssh
+           state: directory
+           mode: 0700
+           owner: root
+           group: root
+
+       - name: Configuring resolver                                    #changing /etc/resolv.conf to 8.8.8.8 and 8.8.4.4
+         template:
+           src: /ansible/initiald/roles/centos7/templates/resolv.conf.j2
+           dest: /etc/resolv.conf
+         when: ansible_distribution != 'Ubuntu' 
+
+       - name:
+         shell: ps aux|grep yum|grep -v grep|awk '{print$2}'|xargs kill -9 ; rm -f /run/yum.pid;rm -f /var/run/yum.pid
+         ignore_errors: true 
+         when: ansible_distribution != 'Ubuntu'
+
+       - name: Yum clean and makecache                    #Yum clean and makecache
+         shell: yum clean all && yum makecache
+         when: ansible_distribution != 'Ubuntu'
+
+       - name: Updating packages                                       #updating the packages
+         yum:
+           name: "*"
+           state: latest
+           update_cache: yes
+           exclude: 
+            - 'NetworkManager*'
+         when: ('.hk.dc.monaco1.me' not in linuxname) and ansible_distribution != 'Ubuntu'
+       - name: Remove firewalld                                                            #Enabling iptables
+         yum:
+           name: firewalld
+           state: absent
+         when: ansible_distribution != 'Ubuntu'
+
+       - name: install iptables                                                             #Enabling iptables
+         yum:
+           name: iptables
+           state: present
+         when: ansible_distribution != 'Ubuntu' 
+#       - name: Configuring iptables                                                          #Configuring iptables
+#         file:
+#           src: /usr/libexec/iptables/iptables.init
+#           dest: /etc/init.d/iptables
+#           state: link
+
+
+       - name: Create bak
+         file:
+           path: /bak/bin
+           state: directory
+           owner: root
+           group: root
+           recurse: yes
+         when: ('b2b-' not in linuxname)
+
+       - name: install ssh
+         yum:
+           name: "{{ item }}"
+           state: present
+         with_items:
+            - openssh
+            - openssh-server
+         when: ansible_distribution != 'Ubuntu'
+
+       - name: Append New ssh key
+         copy:
+            src: /ansible/initiald/root_authorized_keys
+            dest: /root/.ssh/authorized_keys
+            mode: 0600
+            owner: root
+            group: root
+
+       - name: append iptables for b2b init
+         copy:
+            src: /ansible/initiald/iptables-template-b2b.sh
+            dest: /root/.script/iptables.sh
+         when: ('b2b-' in linuxname)
+       
+       - name: run iptables b2b
+         shell: bash /root/.script/iptables.sh
+         when: ('b2b-' in linuxname)         
+
+       - name: Append New ssh key
+         copy:
+            src: /ansible/initiald/iptables-template.sh
+            dest: /bak/bin/iptables.sh
+            mode: 0755
+         when: ('b2b-' not in linuxname)
+
+       - name: Run iptables
+         shell: bash /bak/bin/iptables.sh
+         when: ('b2b-' not in linuxname)
+
+       - name: Append New ssh config
+         copy: 
+            src: /ansible/initiald/sshd_config
+            dest: /etc/ssh/sshd_config
+         when: ('b2b-' not in linuxname)
+
+       - name: Append New ssh config
+         copy:
+            src: /ansible/initiald/sshd_config_b2bdc
+            dest: /etc/ssh/sshd_config
+         when: ('b2b-' in linuxname) and ('.hk.dc.monaco1.me' in linuxname)
+
+       - name: Append New ssh config
+         copy:
+            src: /ansible/initiald/sshd_config_b2bcl
+            dest: /etc/ssh/sshd_config
+         when: ('b2b-' in linuxname) and ('.hk.dc.monaco1.me' not in linuxname)
+
+       - name: Adding to rc.local                                                            #Adding iptables script to rc.local
+         lineinfile:
+           dest: /etc/rc.d/rc.local
+           line: 'bash /root/.script/iptables.sh'
+           state: present
+           insertafter: EOF
+         when: ('b2b-' in linuxname) and ansible_distribution != 'Ubuntu'
+
+       - name: Adding to rc.local                                                            #Adding iptables script to rc.local
+         lineinfile:
+           dest: /etc/rc.d/rc.local
+           line: 'bash /bak/bin/iptables.sh'
+           state: present
+           insertafter: EOF
+         when: ('b2b-' not in linuxname) and ansible_distribution != 'Ubuntu' 
+
+       - name: make rc.local executable
+         shell: "chmod +x /etc/rc.d/rc.local"
+         when: ansible_distribution != 'Ubuntu'
+
+       - name: Append newadd IP
+         lineinfile:
+           regexp: '^{{ ip }}'
+           line: "{{ ip }} ansible_ssh_port=28032 ansible_ssh_user=root"
+           path: /ansible/initiald/hosts
+         delegate_to: localhost
+
+       - name: enabled SSH
+         shell: systemctl restart sshd
+         ignore_errors: true
+
+       - meta: refresh_inventory
+   - hosts: "{{ ip }}"
+     gather_facts: true
+     vars:
+       catcher: [ 43.231.229.122, 210.48.141.18, 210.48.141.21, 210.48.141.23, 210.48.141.26, 118.143.84.226 ]
+       porter: [ 8081, 8082, 6610, 7610, 8083, 8084 ]        
+     pre_tasks:
+       - name: Changing root password                                 #changing root password
+         user:
+           name: root
+           password: "{{ 'sR4123' | password_hash('sha512') }}"
+         when: ('.hk.dc.monaco1.me' not in linuxname)  
+       - name: Unconditionally reboot the machine with all defaults
+         reboot:
+           reboot_timeout: 600
+         ignore_errors: true
+         when: ('.hk.dc.monaco1.me' not in linuxname) and ansible_distribution != 'Ubuntu'
+      
+
+     roles:
+       - role: centos7
+         when: types != 'ssr'
+       - role: geoip
+         when: types == 'cloud_nginx'
+       - role: ip2location
+         when: types == 'cloud_nginx'
+       - role: nginx
+         when: types == 'cloud_nginx'
+#       - role: pupdcenter
+#         when: types == 'hkidc_standard'
+       - role: ubuntu
+         when: types == 'cloud_ubuntu'
+
+
+   - hosts: localhost
+     gather_facts: false
+     roles:
+       - role: pupcreate
+         when: types != 'ebet' or types != 'ssr'
+
+     tasks:
+       - name: Remove new IP
+         lineinfile:
+           line: "{{ ip }} ansible_ssh_port=28032 ansible_ssh_user=root"
+           state: absent
+           path: /ansible/initiald/hosts
+
+

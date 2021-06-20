@@ -10,6 +10,7 @@ class preschool_grading(models.Model):
 	written_work = models.IntegerField(null=False, default=0)
 	performance_task = models.IntegerField(null=False, default=0)
 	quarterly_assessment = models.IntegerField(null=False, default=0)
+	sub_performance_task = models.TextField(max_length=250, null=True)
 
 	def __str__(self):
 		return self.subject
@@ -28,3 +29,10 @@ class students(models.Model):
 
 	def __str__(self):
 		return self.last_name
+
+class teachers(models.Model):
+	username = models.TextField(max_length=30, null=True)
+	subject = models.TextField(max_length=30, null=True)
+
+	def __str__(self):
+		return self.username
