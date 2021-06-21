@@ -1,3 +1,10 @@
 background process for enrollment:
 
 guidance - >  finance - > registrar
+
+teacher :
+
+view:
++drop down
+- subjects
+

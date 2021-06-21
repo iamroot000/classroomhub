@@ -77,14 +77,14 @@ class detailsView(View):
 		return JsonResponse({'data': data}, safe=False)
 
 
-def __test_cece(request):
-	print('testtest')
-	try:
-		if request.is_ajax() and request.method=='POST':
-			rcache = app.send_task('test.testing', args=['nik'], kwargs={})
-			print(rcache.get())
-			return HttpResponse(rcache.get())
-	except Exception as e:
-		print(e)
+# def __test_cece(request):
+# 	print('testtest')
+# 	try:
+# 		if request.is_ajax() and request.method=='POST':
+# 			rcache = app.send_task('test.testing', args=['nik'], kwargs={})
+# 			print(rcache.get())
+# 			return HttpResponse(rcache.get())
+# 	except Exception as e:
+# 		print(e)
 
 

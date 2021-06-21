@@ -10,7 +10,7 @@ class index(View):
 		template_name = 'grading_management/index.html'
 		teacher_details = teachers.objects.all()
 		preschool_details = preschool_grading.objects.all()
-		print(preschool_details)
+		# print(preschool_details)
 		context = {
 			'teacher_details': teacher_details,
 			'preschool_details': preschool_details
@@ -19,10 +19,10 @@ class index(View):
 
 class tableView(View):
 	def get(self,request):
-		# std_query = students.objects.all()
-		# data = serializers.serialize('json', std_query)
-		data = teachers.objects.all()
+		std_query = students.objects.all()
+		data = serializers.serialize('json', std_query)
 		print(data)
-		data = serializers.serialize('json', data)
 		return JsonResponse({'data':data }, safe=False)
+
+# def __modalWritten(request):
 

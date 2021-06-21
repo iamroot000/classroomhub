@@ -9,11 +9,12 @@
 {% block pagetitle %}Grading System{% endblock %}
 {% block endtitlepage %}Grading System{% endblock %}
 {% block content %}
-<p>
-  {% for x in preschool_details %}
-  {{ x.sub_performance_task }}
-  {% endfor %}
-</p>
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" name="DetailsModal" id="DetailsModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" id="modal-content">
+    </div>
+  </div>
+</div>
     <section class="content">
       <div class="container-fluid">
         <div class="row">
@@ -100,18 +101,26 @@
 </script>
 <script>
   const subj_option = document.getElementById('teacher_subjects');
+  const section_option = document.getElementById('class_section');
   {% for i in teacher_details %}
-
-  var subj_list = '{{ i.subject }}'.split(',')
+  var section_list = '{{ i.section }}'.split(',');
+  var subj_list = '{{ i.subject }}'.split(',');
+  for (var sect in section_list){
+    section_option.innerHTML += "<option val'+"+section_list[sect]+"'>"+section_list[sect]+"</option>"
+  }
   for (var subj in subj_list){
     subj_option.innerHTML += "<option val'+"+subj_list[subj]+"'>"+subj_list[subj]+"</option>"
   };
   {% endfor %}
 
-function tableSelection(subject){
-  const tableBody = document.getElementById('table-content')
+function tableSubject(subject){
   console.log(subject)
 }
 
+function tableSection(section){
+  console.log(section)
+}
+
 </script>
+<script src="/static/js/grading_management/main.js"></script>
 {% endblock %}
