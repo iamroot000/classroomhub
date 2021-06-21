@@ -33,16 +33,27 @@ function oncWrittenWork(id){
 
 function addWrittenGrade(res){
   $("#modal-content").append("<p class='ww_p'>1</p><input class='ww_input' type='text'>")
-  var list = $('.ww_p');
+  var list = $('.ww_input');
+  var val_list = [];
   for ( var i = 1; i < list.length; i++){
     list[i].setAttribute("id","ww_"+i);
     var x = "#ww_"+i;
     $(x).html(i+1);
+    // console.log($(x).val)
+    // val_list.push('');
   };
+
+  // var vals = $('.ww_input').map(function(){
+  //   return $(this).attr('value');
+  // }).toArray();
+  // var vals = $('.ww_input'), 
+  // saveWrittenWorkGrades(vals)
+  console.log(val_list)
 
 }
 
 function saveWrittenWorkGrades(id){
-  var a = document.querySelectorAll('[class=ww_input]');
-  console.log(a)
+
+
+  console.log(vals)
 }
