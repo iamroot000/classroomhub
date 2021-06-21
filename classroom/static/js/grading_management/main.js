@@ -26,30 +26,23 @@ $.ajax({
 
 function oncWrittenWork(id){
   const modalBody = document.getElementById("modal-content")
-  // let ww_counter = 0
-  // console.log(id)
   const res = [id]
-  // console.log(res)
   modalBody.innerHTML = "<button onclick='addWrittenGrade("+res+")'>Add Grade</button><button onclick=saveWrittenWorkGrades("+id+")>save</button>"
 
 }
 
 function addWrittenGrade(res){
-  // console.log(res)
-  // const nmodalBody = document.getElementById("modal-content")
-  // var i = 0;
-  $("#modal-content").append("<p class='ww_input'>input grade:</p><input type='text'>")
-  var list = $('.ww_input');
-
-  for ( var i = 0; i < list.length; i++){
-    list[i].setAttribute("class","ww_1"+i);
+  $("#modal-content").append("<p class='ww_p'>1</p><input class='ww_input' type='text'>")
+  var list = $('.ww_p');
+  for ( var i = 1; i < list.length; i++){
+    list[i].setAttribute("id","ww_"+i);
+    var x = "#ww_"+i;
+    $(x).html(i+1);
   };
-  // ww_counter =+ 1
-   // nmodalBody.innerHTML = "<button></save>"
-  // console.log(ww_counter)
-  // console.log(res[1])
+
 }
 
 function saveWrittenWorkGrades(id){
-
+  var a = document.querySelectorAll('[class=ww_input]');
+  console.log(a)
 }
