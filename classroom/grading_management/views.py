@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.views import View
 from .models import *
 from django.core import serializers
+import json
 
 # Create your views here.
 class index(View):
@@ -21,8 +22,17 @@ class tableView(View):
 	def get(self,request):
 		std_query = students.objects.all()
 		data = serializers.serialize('json', std_query)
-		print(data)
+		# print(data)
 		return JsonResponse({'data':data }, safe=False)
 
-# def __modalWritten(request):
+def __saveRWW(request):
+	try:
+		if request.is_ajax and request.method == "POST":
+			get_id = request.POST.get('id')
+			get_rWW = request.POST.getlist('ww[]')
+			print(get_id)
+			print(get_rWW)
+			return HttpResponse('nicesu!')
+	except Exception as e:
+		print(e)
 
