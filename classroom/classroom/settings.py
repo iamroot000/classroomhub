@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'login',
     'dashboard',
     'manager_enrollment',
-    'grading_management'
+    'grading_management',
+    'spreadsheet'
 ]
 
 MIDDLEWARE = [
@@ -84,7 +85,7 @@ DATABASES = {
         'NAME': 'classroomdb',
         'USER': 'classroom_user',
         'PASSWORD': 'classroom123',
-        'HOST': '192.168.1.108',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
@@ -131,7 +132,10 @@ STATICFILES_DIRS = [
 os.path.join(BASE_DIR, "static/"),
 ]
 
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# Crispy Forms
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -154,3 +158,5 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
 CELERY_CREATE_MISSING_QUEUES = True
+SILENCED_SYSTEM_CHECKS = ['urls.W001']
+TIME_ZONE = 'Asia/Manila'

@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf.urls import url, include
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -22,4 +24,9 @@ urlpatterns = [
     url(r'^dashboard/', include('dashboard.urls')),
     url(r'^enrollment/', include('manager_enrollment.urls')),
     url(r'^grading/', include('grading_management.urls')),
+    url(r'^spreadsheet/', include('spreadsheet.urls')),
 ]
+
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_URL)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_URL)

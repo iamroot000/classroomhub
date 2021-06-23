@@ -1,0 +1,60 @@
+{
+    "data": [
+        {
+            "last_name ": "Macalino",
+            "first_name ": "Yroll Jay-R",
+            "q1_grade ": "100",
+            "q2_grade ": "100",
+            "q3_grade ": "100",
+            "q4_grade ": "100",
+            "initial_grade ": "100",
+            "transm_grade ": "100",
+            "subject ": "Math",
+            "section ": "A",
+            "performance_task_grade ": "100",
+            "written_work_grade ": "100"
+        },
+        {
+            "last_name ": "Cadeli\u00f1a",
+            "first_name ": "James Scott",
+            "q1_grade ": "90",
+            "q2_grade ": "90",
+            "q3_grade ": "90",
+            "q4_grade ": "90",
+            "initial_grade ": "90",
+            "transm_grade ": "90",
+            "subject ": "English",
+            "section ": "B",
+            "performance_task_grade ": "90",
+            "written_work_grade ": "90"
+        },
+        {
+            "last_name ": "Nikko Rei",
+            "first_name ": "Aratan",
+            "q1_grade ": "80",
+            "q2_grade ": "80",
+            "q3_grade ": "80",
+            "q4_grade ": "80",
+            "initial_grade ": "80",
+            "transm_grade ": "80",
+            "subject ": "Science",
+            "section ": "C",
+            "performance_task_grade ": "80",
+            "written_work_grade ": "80"
+        },
+        {
+            "last_name ": "Jonas",
+            "first_name ": "Nicanor",
+            "q1_grade ": "70",
+            "q2_grade ": "70",
+            "q3_grade ": "70",
+            "q4_grade ": "70",
+            "initial_grade ": "70",
+            "transm_grade ": "70",
+            "subject ": "Filipino",
+            "section ": "D",
+            "performance_task_grade ": "70",
+            "written_work_grade ": "70"
+        }
+    ]
+}
