@@ -24,23 +24,46 @@ $.ajax({
 function oncWrittenWork(id){
   $('#DetailsModal').modal({'backdrop': 'static'});
   const modalBody = document.getElementById("modal-content")
-  modalBody.innerHTML = "<input id='pk' type='hidden' value='"+id+"'><button type='button' onclick='addWrittenGrade("+id+")'>Add Grade</button><button type='submit' onclick='saveWrittenWorkGrades("+id+")'>save</button>"
-
+  modalBody.innerHTML = "<input id='pk' type='hidden' value='"+id+"'><button type='button' onclick='addWrittenGrade()'>Add Grade</button><button type='submit' onclick='saveWrittenWorkGrades("+id+")'>save</button>"
+  var nDict = {};
+  $.ajax({
+    type: 'GET',
+    url: 'modal-ww',
+    success: function (response){
+      data = JSON.parse(response.data)
+      // console.log(data)
+      $.each(data, function(key, value){
+        nDict[value['pk']] = value['fields']
+        ww_r_c = value['fields']['raw_written_work']
+        // var nww_r_c = string(ww_r_c)
+        // console.log(ww_r_c.trim('[]'))
+        var nww_r_c = ww_r_c.slice(1,-1)
+        list_ww = nww_r_c.split(',')
+        // console.log(list_ww)
+        for (var i in list_ww){
+          var ww = list_ww[i].trim().slice(1,-1)
+          var append_ww = 
+          $("#modal-content").append("<p class='ww_p'>Enter Grade:</p><input class='ww_input' name='grade' type='text' value='"+ww+"'>")
+        }
+      });
+      // console.log(nDict)
+    }
+  });
 }
 
-function addWrittenGrade(res){
-  $("#modal-content").append("<p class='ww_p'>1</p><input class='ww_input' name='grade_0' type='text'>")
-  var list = $('.ww_p');
-  var list2 = $('.ww_input');
+function addWrittenGrade(){
+  $("#modal-content").append("<p class='ww_p'>Enter Grade:</p><input class='ww_input' name='grade' type='text'>")
+  // var list = $('.ww_p');
+  // var list2 = $('.ww_input');
   // var val_list = [];
-  for ( var i = 1; i < list.length; i++){
-    var count = i+1
-    list[i].setAttribute("id","ww_"+i);
-    list2[i].setAttribute("name","grade_"+i)
-    var x = "#ww_"+i;
-    $(x).html(i+1);
+  // for ( var i = 1; i < list.length; i++){
+  //   var count = i+1
+    // list[i].setAttribute("id","ww_"+i);
+    // list2[i].setAttribute("name","grade_"+i)
+    // var x = "#ww_"+i;
+    // $(x).html(i+1);
 
-  };
+  // };
 
 
 }

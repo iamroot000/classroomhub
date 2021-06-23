@@ -80,8 +80,6 @@ function toModal(id){
       document.getElementById('md_qvr').value = nDict[id]['qvr_id'];
       document.getElementById('md_esc').value = nDict[id]['esc_id'];
 
-    },
-    error: function(error){
     }
   });
 }

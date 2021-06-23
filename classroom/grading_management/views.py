@@ -46,3 +46,9 @@ def __saveRWW(request):
 	except Exception as e:
 		print(e)
 
+class viewWrittenWork(View):
+	def get(self, request):
+		ww_q = students.objects.all()
+		data = serializers.serialize('json', ww_q)
+		return JsonResponse({'data': data}, safe=False)
+
