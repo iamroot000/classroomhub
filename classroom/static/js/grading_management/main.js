@@ -63,7 +63,9 @@ function saveWrittenWorkGrades(id){
         data: { 'ww': nList,
                 'id': id },
         success: function(response){
+          // $('#DetailsModal').modal('hide');
           alert(response)
+          location.reload();
         }
       });
   });

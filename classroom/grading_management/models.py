@@ -28,6 +28,7 @@ class students(models.Model):
 	section = models.TextField(max_length=30,null=True)
 	performance_task_grade = models.IntegerField(null=False, default=0)
 	written_work_grade = models.IntegerField(null=False, default=0)
+	raw_written_work = models.TextField(max_length=150, null=True)
 
 	def __str__(self):
 		return self.last_name

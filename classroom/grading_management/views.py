@@ -28,11 +28,21 @@ class tableView(View):
 def __saveRWW(request):
 	try:
 		if request.is_ajax and request.method == "POST":
+			newlist = [];
 			get_id = request.POST.get('id')
 			get_rWW = request.POST.getlist('ww[]')
-			print(get_id)
-			print(get_rWW)
-			return HttpResponse('nicesu!')
+			count_rWW = len(get_rWW)
+			total_rWW = 0;
+			for i in get_rWW:
+				newlist.append(int(i))
+			print(newlist)
+			total_rWW = sum(newlist)
+			print(total_rWW)
+			to_update_ww = students.objects.get(id=get_id)
+			to_update_ww.raw_written_work = get_rWW
+			to_update_ww.written_work_grade = total_rWW
+			to_update_ww.save()
+			return HttpResponse('Successfully Added!')
 	except Exception as e:
 		print(e)
 
