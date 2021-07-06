@@ -25,6 +25,7 @@ SECRET_KEY = 'django-insecure-)wfg_ydfo=kaekepmx$4q#mmr^w$v&a)p(muuy7qw7q6alt@(!
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+#DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -115,13 +116,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Singapore'
+TIME_ZONE = 'Asia/Manila'
 
-USE_I18N = True
+#USE_I18N = True
 
-USE_L10N = True
+#USE_L10N = True
 
-USE_TZ = True
+#USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -145,7 +146,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = '/dashboard'
 
-REDIS_HOST = '192.168.1.108'
+REDIS_HOST = '192.168.254.110'
 REDIS_PORT = 6379
 REDIS_DBINDEX = 0
 REDIS_PASSWORD = None
@@ -159,4 +160,3 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
 CELERY_CREATE_MISSING_QUEUES = True
 SILENCED_SYSTEM_CHECKS = ['urls.W001']
-TIME_ZONE = 'Asia/Manila'

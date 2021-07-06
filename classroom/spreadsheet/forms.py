@@ -15,9 +15,10 @@ class UploadFileForm(forms.ModelForm):
         ]
 
     def clean_file(self):
+        extension = ["csv"]
         file = self.cleaned_data.get("file")
         _file = str(file).replace(' ', '_').split('.')
-        if _file[-1].lower() == 'csv':
+        if _file[-1].lower() in extension:
             return file
         else:
-            raise forms.ValidationError("Invalid Format")
+            raise forms.ValidationError("Invalid File Extension")

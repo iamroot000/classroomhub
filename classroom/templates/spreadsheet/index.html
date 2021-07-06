@@ -35,10 +35,51 @@
 </div>
 <div class="mt-3">
 
+<!--MODAL-->
+<div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-l" role="document">
+<!--  <div class="w-50 p-3" role="document" align="center">-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="exampleModalLabel">Please save to .csv format.</h3>
+          	&nbsp;&nbsp;&nbsp;
+<!--      <button type="submit" class="btn btn-info" id="modal-save">Show Format Info</button>-->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+
+      <div class="modal-body" id="modal-body">
+   <table class="table table-striped" id="modal-table">
+    <thead>
+      <tr id="modal-table-head">
+
+      </tr>
+    </thead>
+    <tbody id="modal-table-content">
+    </tbody>
+  </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-secondary" data-dismiss="modal" id="modal-close">Close</button>
+<!--        <button type="submit" class="btn btn-primary" id="modal-save">Save changes</button>-->
+      </div>
+    </div>
+  </div>
+</div>
+<!--MODAL-->
+
 <form method="POST" class="form-group mx-sm-1", id="p-form">
     {% csrf_token %}
   {{ form|crispy }}
-    <button type="submit" class="btn btn-primary">Save</button>
+<!--    <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="modal-show">Save</button>-->
+    <div class="row">
+      <div class="column"><button type="submit" class="btn btn-primary" id="submit-form">Save</button></div>
+        &ensp;
+      <div class="column" id="btn-info"></div>
+    </div>
 </form>
 
 <hr noshade size="20">
@@ -59,37 +100,35 @@
 <div class="card">
 <div class="card-header">
 <div class="mt-3">
-<h3>Summary <span class="label label-default">Information:</span></h3>
+<h3 id="table-title"></h3>
 <hr noshade size="20">
 </div>
 <div class="mt-3">
 <div class="card-body">
-<table id="applicantTable" class="table table-bordered table-hover">
-<thead>
-<tr>
-<th>Title</th>
-<th>Description</th>
-<th>File</th>
-<th>Date Created</th>
-<th>Action</th>
-</tr>
-</thead>
-<form method="POST" class="form-group mx-sm-1", id="tableform">
-<tbody id="table-content">
-
-
-</tbody>
-</form>
-<tfoot>
-<tr>
-<th>Title</th>
-<th>Description</th>
-<th>File</th>
-<th>Date Created</th>
-<th>Action</th>
-</tr>
-</tfoot>
-</table>
+    <table id="applicantTable" class="table table-bordered table-hover view-datatable">
+        <thead class="table-HF">
+            <tr class="table-HF-row">
+                <th>Title</th>
+                <th>Description</th>
+                <th>File</th>
+                <th>Date Created</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody class="body-tables" id="table-content">
+        </tbody>
+        <tbody class="body-tables" id="table-content2">
+        </tbody>
+        <tfoot>
+            <tr class="table-HF-row">
+                <th>Title</th>
+                <th>Description</th>
+                <th>File</th>
+                <th>Date Created</th>
+                <th>Action</th>
+            </tr>
+        </tfoot>
+    </table>
 </div>
 </div>
 </div>
@@ -105,6 +144,13 @@
 
 
 {% block script %}
+
+
+<!--JQUERY-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
+<!--JQUERY-->
+
+
 <!-- Data Tables -->
 <script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="/static/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -118,29 +164,14 @@
 <script src="/static/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="/static/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="/static/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-<script>
-  $(function () {
-    $('#applicantTable').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-        "order": [[ 3, "desc" ]], //or desc (for descending)
-        "columnDefs" : [{"targets":1, "type":"DATE"}],
-
-    });
-  });
-</script>
-<script>
-$(document).ready(function() {
-    $('#applicantTable').DataTable();
-} );
-</script>
 <!-- /.Data Tables -->
- <script src="/static/dropzone/dist/dropzone.js"></script>
+<script src="/static/dist/js/adminlte.min.js"></script>
+
+
+
+
 <!--Custom Script-->
-<script src="/static/spreadsheet/main.js"></script>
+<script src="/static/dropzone/dist/dropzone.js"></script>
+<script src="/static/spreadsheet/mainjq.js"></script>
+<!--Custom Script-->
 {% endblock script %}

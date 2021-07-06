@@ -1,0 +1,15 @@
+ .row-full{
+ width: 100vw;
+ position: relative;
+ margin-left: -50vw;
+ height: 100px;
+ margin-top: 100px;
+ left: 50%;
+}
+
+@media (min-width: 768px) {
+  .modal-custom-xl {
+    width: 90%;
+   max-width:1200px;
+  }
+}
