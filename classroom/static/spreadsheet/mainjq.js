@@ -28,27 +28,9 @@ const tabletitle = 'Summary <span class="label label-default">Information:</span
 
 
 
-
-
-//datatable settings
-function tablesettings(tdestroy=false){
-    if(tdestroy == true){
-        table = $('#applicantTable').DataTable().destroy()
-        table = $('#applicantTable').DataTable({
-            "paging": false,
-            "lengthChange": true,
-            "searching": false,
-            "ordering": false,
-            "info": false,
-            "autoWidth": false,
-            "responsive": true,
-            "retrieve": true,
-
-        })
-    }
-    else{
-        table = $('#applicantTable').DataTable().destroy()
-        table = $('#applicantTable').DataTable({
+//history datatable settings
+function tablesettingsmodal(){
+        $('#modal-table').DataTable({
             "paging": true,
             "lengthChange": true,
             "searching": true,
@@ -69,10 +51,54 @@ function tablesettings(tdestroy=false){
             "bAutoWidth": false,
             "retrieve": true,
         })
+}
+
+
+//datatable settings
+function tablesettings(tdestroy=false,tablename='#applicantTable'){
+    if(tdestroy == true){
+        table = $(tablename).DataTable().destroy()
+        table = $(tablename).DataTable({
+            "paging": false,
+            "lengthChange": true,
+            "searching": false,
+            "ordering": false,
+            "info": false,
+            "autoWidth": false,
+            "responsive": true,
+            "retrieve": true,
+
+        })
+    }
+    else{
+        table = $(tablename).DataTable().destroy()
+        table = $(tablename).DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "order": [[ 4, "desc" ]], //or desc (for descending)
+            "columnDefs" : [{"targets":1, "type":"date"}],
+            "draw": 1,
+            "recordsTotal": 10,
+            "recordsFiltered": 10,
+            "bLengthChange": true,
+            "lengthMenu": [ [10, 15, 25, 50, 100, -1], [10, 15, 25, 50, 100, "All"] ],
+            "iDisplayLength": 10,
+            "bInfo": false,
+            "responsive": true,
+            "bAutoWidth": false,
+            "retrieve": true,
+        })
     }
 
 
 }
+
+
 
 //get table info
 function tabledata(tdestroy=false){
@@ -84,13 +110,33 @@ $.ajax({
         $('#table-title').html(tabletitle)
         tableContent.empty()
         for (let value of response["table"]){
-            tableContent.prepend(`<tr>
-            <td>${value["title"]}</td>
-            <td>${value["description"]}</td>
-            <td>${value["file"]}</td>
-            <td>${value["created"]}</td>
-            <td><button value=${value["id"]} type="button" class="btn btn-secondary" id="action-button${value['id']}">Details</button></td>
-            </tr>`)
+            if (response["permission"] == true){
+                tableContent.prepend(`<tr>
+                <td>${value["username"]}</td>
+                <td>${value["title"]}</td>
+                <td>${value["description"]}</td>
+                <td>${value["file"].split('/')[1]}</td>
+                <td>${value["created"]}</td>
+                <td><a href='download/${value["file"]}' class="nav-link"><button value=${value["id"]} type="button" class="btn btn-success download-btn" id="action-button${value['id']}"><i class="fa fa-download"></i>&nbsp;Download</button></a></td>
+                </tr>`)
+                $(`#action-button${value['id']}`).on('click', function(){
+                alert(`${value["file"].split('/')[1]} will be downloaded.`)
+                })
+                historydata()
+                $('#history-btn').show()
+            }
+            else{
+                tableContent.prepend(`<tr>
+                <td>${value["username"]}</td>
+                <td>${value["title"]}</td>
+                <td>${value["description"]}</td>
+                <td>${value["file"].split('/')[1]}</td>
+                <td>${value["created"]}</td>
+                </tr>`)
+                $('.action-perm').remove()
+                $('#history-area').remove()
+            }
+
         }
     if (tdestroy == true){
         tablesettings(tdestroy=true)
@@ -107,7 +153,7 @@ $.ajax({
 
 
 
-//show valid info button
+//show modal valid info button
 function showdetails(message=null,object){
     const response = object
     if(message == 'danger'){
@@ -123,6 +169,7 @@ function showdetails(message=null,object){
             $('#table-content').empty()
             $('#table-content').show()
             $(".body-tables").empty()
+            $('#history-btn').show()
             tabledata()
         }
         else{
@@ -133,6 +180,7 @@ function showdetails(message=null,object){
             $('#applicantTable_length').remove()
             $('#applicantTable_paginate').remove()
             $('#applicantTable_info').remove()
+            $('#history-btn').hide()
 
         }
         })
@@ -141,6 +189,7 @@ function showdetails(message=null,object){
         $("#btn-info").html(`<button type="button" class="btn btn-info" id="${message}-btn" data-toggle="modal" data-target="#exampleModal">Show Valid Extension</button>`)
         const url = ['https://www.efilecabinet.com/wp-content/uploads/2019/03/csv-01.png']
         modalBody.empty()
+        $('#exampleModalLabel').text('Please save to .csv format.')
         for (let urlval of url){
             modalBody.append(`<p><img src="${url}" width="100%"></p>`)
         }
@@ -153,7 +202,7 @@ function showdetails(message=null,object){
 
 
 
-//adding modal table data
+//adding table data
 function modaltabledata(object,tshow=false){
     console.log(object)
     modalThead.empty()
@@ -203,6 +252,54 @@ function modaltabledata(object,tshow=false){
 
 
 }
+
+
+
+
+//history modal
+function historydata(){
+    $('#history-area').html('<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#historymodal" id="history-btn"><i class="fa fa-fax"></i>&nbsp;Download History</button>')
+    $('#history-btn').on('click', function(){
+        $.ajax({
+            type: 'GET',
+            url: 'history',
+            success: function(response){
+                console.log(response)
+                $('#historylabel').text('Download Information:')
+                modalThead.empty()
+                modalTcontent.empty()
+                for (let head of response['tablehead']){
+                    modalThead.append(`<th>${head.toUpperCase()}</th>`)
+                }
+                for (let tabledata of response['table']){
+                    if (tabledata['status'] == "MISSING"){
+                        modalTcontent.prepend(`<tr>
+                        <td>${tabledata['username']}</td>
+                        <td><span class="badge badge-warning">${tabledata['status']}</span></td>
+                        <td>${tabledata['file']}</td>
+                        <td>${tabledata['created']}</td>
+                        </tr>`)
+                    }
+                    else{
+                        modalTcontent.prepend(`<tr>
+                        <td>${tabledata['username']}</td>
+                        <td><span class="badge badge-success">${tabledata['status']}</span></td>
+                        <td>${tabledata['file']}</td>
+                        <td>${tabledata['created']}</td>
+                        </tr>`)
+                    }
+                }
+                tablesettingsmodal()
+            },
+            error: function(error){
+                console.log(error)
+            }
+            })
+    })
+
+}
+
+
 
 
 //call file form
@@ -258,6 +355,5 @@ form.on('submit', function(e){
 
 
 tabledata()
-
 
 });

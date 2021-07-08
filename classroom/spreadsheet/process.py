@@ -1,6 +1,6 @@
 from django.conf import settings
 from grading_management.models import *
-from .models import UploadFileModel
+from .models import *
 import csv, json, os, time
 
 
@@ -58,6 +58,20 @@ def getstudentfield():
     return field_data
 
 
+
+def getdownloadhistoryfield():
+    field_val = DownloadHistoryModel._meta.get_fields()
+    field_exception = ["id"]
+    field_data = []
+    for i in list(field_val):
+        val = str(i).split('.')[-1]
+        if val not in field_exception:
+            field_data.append(val)
+
+    return field_data
+
+
+
 def getlatestrow(title=False, description=False, file=False, created=False, id=False):
     latest_id = UploadFileModel.objects.last()
     latest_data = UploadFileModel.objects.get(id=int(str(latest_id)))
@@ -89,6 +103,20 @@ def getstudentdata():
 
     print("this is the student data: ", rval['data'])
     return rval
+
+
+
+def savedatainfo(upload=False, history=False, **data):
+    print('this is the username: ', data["username"])
+    if upload:
+        latest_id = UploadFileModel.objects.last()
+        latest_data = UploadFileModel.objects.get(id=int(str(latest_id)))
+        latest_data.username = data["username"]
+        latest_data.save()
+    if history:
+        DownloadHistoryModel.objects.create(**data)
+    return True
+
 
 if __name__ == "__main__":
     file = "files/AdminLTE_3__DataTables_8GWQdeH.csv"

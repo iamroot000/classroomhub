@@ -4,7 +4,7 @@ from django.http import Http404, HttpResponseNotFound
 
 class PermissionCheckMIXIN(AccessMixin):
     permission_required = None
-    appname = 'spreadsheet'
+    appname = None
     def dispatch(self, request, *args, **kwargs):
         if not request.user.has_perm(self.appname+'.'+ self.permission_required):
             self.raise_exception = True
