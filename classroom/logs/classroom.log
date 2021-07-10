@@ -1,0 +1,27 @@
+nohup: appending output to 'nohup.out'
+usage: manage.py runserver [-h] [--ipv6] [--nothreading] [--noreload]
+                           [--nostatic] [--insecure] [--version]
+                           [-v {0,1,2,3}] [--settings SETTINGS]
+                           [--pythonpath PYTHONPATH] [--traceback]
+                           [--no-color] [--force-color]
+                           [addrport]
+manage.py runserver: error: unrecognized arguments: logs/classroom.log
+nohup: appending output to 'nohup.out'
+usage: manage.py runserver [-h] [--ipv6] [--nothreading] [--noreload]
+                           [--nostatic] [--insecure] [--version]
+                           [-v {0,1,2,3}] [--settings SETTINGS]
+                           [--pythonpath PYTHONPATH] [--traceback]
+                           [--no-color] [--force-color]
+                           [addrport]
+manage.py runserver: error: unrecognized arguments: logs/classroom.log
+nohup: appending output to 'nohup.out'
+usage: manage.py runserver [-h] [--ipv6] [--nothreading] [--noreload]
+                           [--nostatic] [--insecure] [--version]
+                           [-v {0,1,2,3}] [--settings SETTINGS]
+                           [--pythonpath PYTHONPATH] [--traceback]
+                           [--no-color] [--force-color]
+                           [addrport]
+manage.py runserver: error: unrecognized arguments: logs/classroom.log
+nohup: appending output to 'nohup.out'
+CommandError: "logs/classroom.log" is not a valid port number or address:port pair.
+start.sh: 8: logs/classroom.log: Permission denied

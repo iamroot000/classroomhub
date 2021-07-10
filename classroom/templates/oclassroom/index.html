@@ -1,0 +1,31 @@
+{% extends "dashboard.html" %}
+{% block title %} Classroom {% endblock %}
+{% block style %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src='https://meet.jit.si/external_api.js'></script>
+<script src="/static/js/oclassroom/config.js"></script>
+<script>
+  $(document).ready(function(){
+    var domain = "meet.jit.si";
+    var options = {
+      roomName: "Payaman",
+      width: 800,
+      height: 800,
+      parentNode: document.querySelector('#meet')
+    }
+    var api = new JitsiMeetExternalAPI(domain, options);
+  });
+</script>
+
+
+{% endblock %}
+{% block pagetitle %}Classroom{% endblock %}
+{% block endtitlepage %}Classroom{% endblock %}
+{% block content %}
+<h1>TEST PAYAMAN</h1>
+<div id='meet'>
+  meeting
+</div>
+{% endblock %}
+{% block script %}
+{% endblock %}

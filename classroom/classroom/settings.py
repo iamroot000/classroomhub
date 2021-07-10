@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'login',
     'dashboard',
     'manager_enrollment',
-    'grading_management'
+    'grading_management',
+    'oclassroom',
 ]
 
 MIDDLEWARE = [

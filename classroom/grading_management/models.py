@@ -29,6 +29,7 @@ class students(models.Model):
 	performance_task_grade = models.IntegerField(null=False, default=0)
 	written_work_grade = models.IntegerField(null=False, default=0)
 	raw_written_work = models.TextField(max_length=150, null=True)
+	raw_performance_task = models.TextField(max_length=250, null=True)
 
 	def __str__(self):
 		return self.last_name
