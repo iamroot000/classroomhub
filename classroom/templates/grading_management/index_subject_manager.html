@@ -1,0 +1,29 @@
+{% extends "dashboard.html" %}
+{% block title %} Subject Manager {% endblock %}
+{% block style %}
+<link rel="stylesheet" href="/static/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+<link rel="stylesheet" href="/static/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+<!-- <script src="/static/js/grading_management/main.js"></script> -->
+{% endblock %}
+{% block pagetitle %}Subject Manager{% endblock %}
+{% block endtitlepage %}Subject Manager{% endblock %}
+{% block content %}
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" name="DetailsModal" id="DetailsModal">
+  <div class="modal-dialog modal-lg">
+    <form id="form-modal">
+      <div class="modal-content" id="modal-content">
+      </div>
+    </form>
+  </div>
+</div>
+<!-- content -->
+<div>
+<label>Select Subject</label>
+  <select class="form-control" id="teacher_subjects" onclick='sm_subject_selector(this.value)'>
+  </select>
+</div>
+<!-- end content  -->
+{% endblock %}
+{% block script %}
+<script src="/static/dist/js/adminlte.min.js"></script>
+{% endblock %}

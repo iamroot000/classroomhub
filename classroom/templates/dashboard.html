@@ -181,7 +181,7 @@
           <img src="/static/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">{{ request.user }}</a>
+          <a href="{% url 'subject-manager' %}" class="d-block">{{ request.user }}</a>
         </div>
       </div>
 
@@ -242,9 +242,47 @@
             </ul>
           </li>
           <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-edit"></i>
+              <p>
+                View Grades
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <p>Q1</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <p>Q2</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <p>Q3</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <p>Q4</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
             <a href="{% url 'grading_management' %}" class="nav-link">
               <p>
                 Grading System
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'oclassroom' %}" class="nav-link">
+              <p>
+                Classroom
               </p>
             </a>
           </li>
@@ -277,7 +315,15 @@
 
     <!-- / Main content -->
     {% block content %}
-    <p> kwakwak </p>
+      <p> School news & updates </p>
+      <p> School news & updates </p>
+      <p> School news & updates </p>
+      <p> School news & updates </p>
+      <p> School news & updates </p>
+      <p> School news & updates </p>
+      <p> School news & updates </p>
+      <p> School news & updates </p>
+      <p> School news & updates </p>
     {% endblock %}
     <!-- /.content -->
   </div>

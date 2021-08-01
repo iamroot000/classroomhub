@@ -26,10 +26,11 @@ class students(models.Model):
 	transm_grade = models.IntegerField(null=False, default=0)
 	subject = models.TextField(max_length=30,null=True)
 	section = models.TextField(max_length=30,null=True)
-	performance_task_grade = models.IntegerField(null=False, default=0)
-	written_work_grade = models.IntegerField(null=False, default=0)
+	performance_task_grade = models.FloatField(null=False, default=0)
+	written_work_grade = models.FloatField(null=False, default=0)
 	raw_written_work = models.TextField(max_length=150, null=True)
 	raw_performance_task = models.TextField(max_length=250, null=True)
+	sraw_performance_task = models.TextField(max_length=250, null=True)
 
 	def __str__(self):
 		return self.last_name
@@ -38,7 +39,8 @@ class teachers(models.Model):
 	username = models.TextField(max_length=30, null=True)
 	subject = models.TextField(max_length=250, null=True)
 	section = models.TextField(max_length=250, null=True)
-
+	ww_multip = models.TextField(max_length=250, null=True)
+	pt_multip = models.TextField(max_length=250, null=True)
 
 	def __str__(self):
 		return self.username

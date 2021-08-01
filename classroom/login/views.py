@@ -4,7 +4,7 @@ from django.views import View
 
 class home(View):
 
-	template_name = 'index.html'
+	template_name = 'login/index.html'
 
 	def get(self, request):
 		
