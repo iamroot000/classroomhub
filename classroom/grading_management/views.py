@@ -6,6 +6,7 @@ from django.core import serializers
 from itertools import chain
 import json
 import collections
+from .process.transm_calc import calculateme
 
 # Create your views here.
 class index(View):
@@ -46,14 +47,17 @@ def __saveRWW(request):
 				dwwt = json.loads(www)
 				wwwt = dwwt['math']
 			# print(wwwt)
-			nwwwt = wwwt / 50
+
+			to_update_ww = students.objects.get(id=get_id)
+			nwwwt = wwwt / to_update_ww.total_items_ww
 			total_rWW = sum(newlist) * nwwwt
 			print(total_rWW)
-			to_update_ww = students.objects.get(id=get_id)
 			to_update_ww.raw_written_work = get_rWW
 			to_update_ww.written_work_grade = total_rWW
 			to_update_ww.save()
 			to_update_ww.initial_grade =  total_rWW + to_update_ww.performance_task_grade
+			to_update_ww.save()
+			to_update_ww.transm_grade = calculateme(to_update_ww.initial_grade)
 			to_update_ww.save()
 			return HttpResponse('Successfully Added!')
 	except Exception as e:
@@ -95,11 +99,13 @@ def __saveRPT(request):
 				ppt = pt_multi['pt_multip']
 				dppt = json.loads(ppt)
 				pppt = dppt['math']
-			npppt = pppt / 70
+			npppt = pppt / to_update_sraw_pt.total_items_pt
 			total_rPT = npppt * total_pt
 			to_update_sraw_pt.performance_task_grade = total_rPT
 			to_update_sraw_pt.save()
 			to_update_sraw_pt.initial_grade = total_rPT + to_update_sraw_pt.written_work_grade
+			to_update_sraw_pt.save()
+			to_update_sraw_pt.transm_grade = calculateme(to_update_sraw_pt.initial_grade)
 			to_update_sraw_pt.save()
 			return HttpResponse('Successfully Added!')
 	except Exception as e:

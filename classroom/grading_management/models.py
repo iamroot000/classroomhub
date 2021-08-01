@@ -28,9 +28,11 @@ class students(models.Model):
 	section = models.TextField(max_length=30,null=True)
 	performance_task_grade = models.FloatField(null=False, default=0)
 	written_work_grade = models.FloatField(null=False, default=0)
-	raw_written_work = models.TextField(max_length=150, null=True)
-	raw_performance_task = models.TextField(max_length=250, null=True)
-	sraw_performance_task = models.TextField(max_length=250, null=True)
+	raw_written_work = models.TextField(max_length=150, null=False)
+	raw_performance_task = models.TextField(max_length=250, null=False)
+	sraw_performance_task = models.TextField(max_length=250, null=False)
+	total_items_pt = models.FloatField(null=False, default=0)
+	total_items_ww = models.FloatField(null=False, default=0)
 
 	def __str__(self):
 		return self.last_name
